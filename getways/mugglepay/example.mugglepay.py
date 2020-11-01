@@ -7,7 +7,7 @@ import requests
 TOKEN = ''
 
 # 支付后返回地址
-RETURN_URL = "https://kangle.bakbak.cn/paysuccess.html"
+RETURN_URL = "https://baidu.com"
 
 
 def submit(money, name, trade_id):

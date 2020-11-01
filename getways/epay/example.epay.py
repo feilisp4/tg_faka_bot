@@ -4,13 +4,13 @@ import json
 import re
 
 # 易支付API地址
-API = 'https://home.bakbak.cn/'
+API = 'https://baidu.com/'
 # 商户ID
 ID = 1041
 # 商户密钥
 KEY = 'm6KM7yP6L213125XmZ7QwwFKwYkm1BK'
 # 支付成功跳转链接
-JUMP_URL = "https://kangle.bakbak.cn/paysuccess.html"
+JUMP_URL = "https://baidu.com"
 
 
 def submit(money, name, trade_id):
