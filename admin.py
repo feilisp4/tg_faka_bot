@@ -125,7 +125,7 @@ def admin_entry_route(update, context):
             if int(newest_version.split('.')[0]) > int(VERSION.split('.')[0]):
                 print('检测到最新版本！\n您当前的版本为：{}\n最新的版本为：{}'.format(VERSION, newest_version))
                 query.edit_message_text(
-                    text='检测到最新版本！\n\n您当前的版本为：{}\n最新的版本为：{}\n查看更新日志：@tgfaka_bb\n前往项目地址：{}'.format(
+                    text='检测到最新版本！\n\n您当前的版本为：{}\n最新的版本为：{}\n查看更新日志：@devourbots_channel\n前往项目地址：{}'.format(
                         VERSION, newest_version, 'https://github.com/devourbots/tg_faka_bot'),
                     disable_web_page_preview=True
                 )
@@ -134,7 +134,7 @@ def admin_entry_route(update, context):
                 if int(newest_version.split('.')[1]) > int(VERSION.split('.')[1]):
                     print('检测到最新版本！\n您当前的版本为：{}\n最新的版本为：{}'.format(VERSION, newest_version))
                     query.edit_message_text(
-                        text='检测到最新版本！\n\n您当前的版本为：{}\n最新的版本为：{}\n查看更新日志：@tgfaka_bb\n前往项目地址：{}'.format(
+                        text='检测到最新版本！\n\n您当前的版本为：{}\n最新的版本为：{}\n查看更新日志：@devourbots_channel\n前往项目地址：{}'.format(
                             VERSION, newest_version, 'https://github.com/devourbots/tg_faka_bot'),
                         disable_web_page_preview=True
                     )
@@ -143,14 +143,14 @@ def admin_entry_route(update, context):
                     if int(newest_version.split('.')[2]) > int(VERSION.split('.')[2]):
                         print('检测到最新版本！\n您当前的版本为：{}\n最新的版本为：{}'.format(VERSION, newest_version))
                         query.edit_message_text(
-                            text='检测到最新版本！\n\n您当前的版本为：{}\n最新的版本为：{}\n查看更新日志：@tgfaka_bb\n前往项目地址：{}'.format(
+                            text='检测到最新版本！\n\n您当前的版本为：{}\n最新的版本为：{}\n查看更新日志：@devourbots_channel\n前往项目地址：{}'.format(
                                 VERSION, newest_version, 'https://github.com/devourbots/tg_faka_bot'),
                             disable_web_page_preview=True
                         )
                         return ConversationHandler.END
                     elif int(newest_version.split('.')[2]) == int(VERSION.split('.')[2]):
-                        print('目前已是最新版本，如有BUG，欢迎加群 @tgfaka 积极反馈！')
-                        query.edit_message_text(text='目前已是最新版本，如有BUG，欢迎加群 @tgfaka 积极反馈！')
+                        print('目前已是最新版本，如有BUG，欢迎加群 @devourbots 积极反馈！')
+                        query.edit_message_text(text='目前已是最新版本，如有BUG，欢迎加群 @devourbots 积极反馈！')
                         return ConversationHandler.END
         except Exception as e:
             print(e)
