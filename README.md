@@ -9,10 +9,10 @@ Telegram 交流反馈群组：@devourbots  [点击加入](https://t.me/devourbot
 ## 使用方法
 ### 第一次安装
 #### 安装使用教程（含视频）
-[查看教程](https://github.com/lulafun/tg_faka_bot/wiki/%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B)
+[查看教程](https://github.com/devourbots/tg_faka_bot/wiki/%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B)
 
 ### 如何升级版本
-[查看说明](https://github.com/lulafun/tg_faka_bot/wiki/%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7%E6%96%B9%E6%B3%95)
+[查看说明](https://github.com/devourbots/tg_faka_bot/wiki/%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7%E6%96%B9%E6%B3%95)
 
 ## 功能介绍
 
@@ -42,8 +42,8 @@ Telegram 交流反馈群组：@devourbots  [点击加入](https://t.me/devourbot
 
 #### 配置自己的支付接口
 
-[查看说明](https://github.com/lulafun/tg_faka_bot/wiki/%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B#%E7%BB%A7%E7%BB%AD%E9%85%8D%E7%BD%AE%E6%94%AF%E4%BB%98%E6%8E%A5%E5%8F%A3%E4%BF%A1%E6%81%AF)
+[查看说明](https://github.com/devourbots/tg_faka_bot/wiki/%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B)
 
 
 #### 编写自己的支付接口
-[查看教程](https://github.com/lulafun/tg_faka_bot/wiki/%E7%BC%96%E5%86%99%E8%87%AA%E5%B7%B1%E7%9A%84%E6%94%AF%E4%BB%98%E6%8E%A5%E5%8F%A3%E6%96%870707195%E4%BB%B6)
+[查看教程](https://github.com/devourbots/tg_faka_bot/wiki/%E7%BC%96%E5%86%99%E8%87%AA%E5%B7%B1%E7%9A%84%E6%94%AF%E4%BB%98%E6%8E%A5%E5%8F%A3%E6%96%87%E4%BB%B6)
