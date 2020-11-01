@@ -115,7 +115,7 @@ def admin_entry_route(update, context):
         return ADMIN_MARKETING_ROUTE
     elif update.callback_query.data == '更新':
         try:
-            newest_version = requests.get('https://raw.githubusercontent.com/lulafun/tg_faka_bot/master/update/version', timeout=3).text
+            newest_version = requests.get('https://raw.githubusercontent.com/devourbots/tg_faka_bot/master/update/version', timeout=3).text
         except Exception as e:
             print(e)
             print('最新版本获取失败，请检测服务器与GitHub的连通性！')
@@ -126,7 +126,7 @@ def admin_entry_route(update, context):
                 print('检测到最新版本！\n您当前的版本为：{}\n最新的版本为：{}'.format(VERSION, newest_version))
                 query.edit_message_text(
                     text='检测到最新版本！\n\n您当前的版本为：{}\n最新的版本为：{}\n查看更新日志：@tgfaka_bb\n前往项目地址：{}'.format(
-                        VERSION, newest_version, 'https://github.com/lulafun/tg_faka_bot'),
+                        VERSION, newest_version, 'https://github.com/devourbots/tg_faka_bot'),
                     disable_web_page_preview=True
                 )
                 return ConversationHandler.END
@@ -135,7 +135,7 @@ def admin_entry_route(update, context):
                     print('检测到最新版本！\n您当前的版本为：{}\n最新的版本为：{}'.format(VERSION, newest_version))
                     query.edit_message_text(
                         text='检测到最新版本！\n\n您当前的版本为：{}\n最新的版本为：{}\n查看更新日志：@tgfaka_bb\n前往项目地址：{}'.format(
-                            VERSION, newest_version, 'https://github.com/lulafun/tg_faka_bot'),
+                            VERSION, newest_version, 'https://github.com/devourbots/tg_faka_bot'),
                         disable_web_page_preview=True
                     )
                     return ConversationHandler.END
@@ -144,7 +144,7 @@ def admin_entry_route(update, context):
                         print('检测到最新版本！\n您当前的版本为：{}\n最新的版本为：{}'.format(VERSION, newest_version))
                         query.edit_message_text(
                             text='检测到最新版本！\n\n您当前的版本为：{}\n最新的版本为：{}\n查看更新日志：@tgfaka_bb\n前往项目地址：{}'.format(
-                                VERSION, newest_version, 'https://github.com/lulafun/tg_faka_bot'),
+                                VERSION, newest_version, 'https://github.com/devourbots/tg_faka_bot'),
                             disable_web_page_preview=True
                         )
                         return ConversationHandler.END
