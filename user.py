@@ -206,59 +206,63 @@ def submit_trade(update, context):
             now_time = int(time.time())
             payment_api = importlib.import_module("getways." + user_payment_method + "." + user_payment_method)
             return_data = payment_api.submit(price, name, trade_id)
-            if return_data['status'] == 'Success':
-                print('API请求成功')
-                conn = sqlite3.connect('faka.sqlite3')
-                cursor = conn.cursor()
-                cursor.execute("update cards set status=? where id=?", ('locking', card_id,))
-                if 'out_trade_no' in return_data:
-                    cursor.execute("INSERT INTO trade VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                                   (trade_id, goods_id, category_name + "｜" + goods_name, description,
-                                    use_way, card_id, card_content, user_id, username, now_time, 'unpaid',
-                                    user_payment_method, str(return_data['out_trade_no'])))
-                else:
-                    cursor.execute("INSERT INTO trade VALUES (?,?,?,?,?,?,?,?,?,?,?,?,NULL)",
-                                   (trade_id, goods_id, category_name + "｜" + goods_name, description,
-                                    use_way, card_id, card_content, user_id, username, now_time, 'unpaid',
-                                    user_payment_method))
-                conn.commit()
-                conn.close()
-                if return_data['type'] == 'url':
-                    if 'msg' in return_data:
-                        msg = return_data['msg']
+            try:
+                if return_data['status'] == 'Success':
+                    print('API请求成功')
+                    # print(return_data)
+                    conn = sqlite3.connect('faka.sqlite3')
+                    cursor = conn.cursor()
+                    cursor.execute("update cards set status=? where id=?", ('locking', card_id,))
+                    if 'out_trade_no' in return_data:
+                        cursor.execute("INSERT INTO trade VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                                       (trade_id, goods_id, category_name + "｜" + goods_name, description,
+                                        use_way, card_id, card_content, user_id, username, now_time, 'unpaid',
+                                        user_payment_method, str(return_data['out_trade_no'])))
                     else:
-                        msg = ''
-                    pay_url = return_data['data']
-                    keyboard = [[InlineKeyboardButton("点击跳转支付", url=pay_url)]]
-                    reply_markup = InlineKeyboardMarkup(keyboard)
+                        cursor.execute("INSERT INTO trade VALUES (?,?,?,?,?,?,?,?,?,?,?,?,NULL)",
+                                       (trade_id, goods_id, category_name + "｜" + goods_name, description,
+                                        use_way, card_id, card_content, user_id, username, now_time, 'unpaid',
+                                        user_payment_method))
+                    conn.commit()
+                    conn.close()
+                    if return_data['type'] == 'url':
+                        if 'msg' in return_data:
+                            msg = return_data['msg']
+                        else:
+                            msg = ''
+                        pay_url = return_data['data']
+                        keyboard = [[InlineKeyboardButton("点击跳转支付", url=pay_url)]]
+                        reply_markup = InlineKeyboardMarkup(keyboard)
+                        query.edit_message_text(
+                            '{}请在{}s内支付完成，超时支付会导致发货失败！\n'
+                            '[点击这里]({})跳转支付，或者点击下方跳转按钮'.format(msg, PAY_TIMEOUT, pay_url),
+                            parse_mode='Markdown',
+                            reply_markup=reply_markup
+                        )
+                        return ConversationHandler.END
+                    elif return_data['type'] == 'qr_code':
+                        if 'msg' in return_data:
+                            msg = return_data['msg']
+                        else:
+                            msg = ''
+                        qr_code = return_data['data']
+                        query.edit_message_text(
+                            '{}请在{}s内支付完成，超时支付会导致发货失败！\n'.format(msg, PAY_TIMEOUT),
+                            parse_mode='Markdown',
+                        )
+                        bot.send_photo(
+                            chat_id=chat_id,
+                            photo='{}'.format(qr_code)
+                        )
+                        return ConversationHandler.END
+                elif return_data['status'] == 'Failed':
+                    print(user_payment_method + " 支付接口故障，请前往命令行查看错误信息")
                     query.edit_message_text(
-                        '{}请在{}s内支付完成，超时支付会导致发货失败！\n'
-                        '[点击这里]({})跳转支付，或者点击下方跳转按钮'.format(msg, PAY_TIMEOUT, pay_url),
-                        parse_mode='Markdown',
-                        reply_markup=reply_markup
+                        '订单创建失败：支付接口故障，请联系管理员处理！\n',
                     )
                     return ConversationHandler.END
-                elif return_data['type'] == 'qr_code':
-                    if 'msg' in return_data:
-                        msg = return_data['msg']
-                    else:
-                        msg = ''
-                    qr_code = return_data['data']
-                    query.edit_message_text(
-                        '{}请在{}s内支付完成，超时支付会导致发货失败！\n'.format(msg, PAY_TIMEOUT),
-                        parse_mode='Markdown',
-                    )
-                    bot.send_photo(
-                        chat_id=chat_id,
-                        photo='http://api.qrserver.com/v1/create-qr-code/?data={}&bgcolor=FFFFCB'.format(qr_code)
-                    )
-                    return ConversationHandler.END
-            elif return_data['status'] == 'Failed':
-                print(user_payment_method + " 支付接口故障，请前往命令行查看错误信息")
-                query.edit_message_text(
-                    '订单创建失败：支付接口故障，请联系管理员处理！\n',
-                )
-                return ConversationHandler.END
+            except Exception as e:
+                print(e)
         else:
             query.edit_message_text('您存在未支付订单，请支付或取消订单过期后再次下单！')
             return ConversationHandler.END
@@ -530,48 +534,55 @@ def payment_change_or_cancel(update, context):
             old_payment_api.cancel(trade_id)
             payment_api = importlib.import_module("getways." + user_choose + "." + user_choose)
             return_data = payment_api.submit(float(goods_price), goods_name, new_trade_id)
-            if return_data['status'] == 'Success':
-                print('API请求成功')
-                conn = sqlite3.connect('faka.sqlite3')
-                cursor = conn.cursor()
-                if 'out_trade_no' in return_data:
-                    cursor.execute(
-                        "update trade set trade_id=?, payment_method=?, out_trade_no=?, creat_time=? where trade_id=?",
-                        (new_trade_id, user_choose, str(return_data['out_trade_no']), now_time, trade_id))
-                else:
-                    cursor.execute(
-                        "update trade set trade_id=?,payment_method=?,creat_time=?,out_trade_no=NULL where trade_id=?",
-                        (new_trade_id, user_choose, now_time, trade_id))
-                conn.commit()
-                conn.close()
-                if return_data['type'] == 'url':
-                    pay_url = return_data['data']
-                    keyboard = [[InlineKeyboardButton("点击跳转支付", url=pay_url)]]
-                    reply_markup = InlineKeyboardMarkup(keyboard)
+            try:
+                if return_data['status'] == 'Success':
+                    if 'msg' in return_data:
+                        msg = return_data['msg']
+                    else:
+                        msg = ''
+                    print('API请求成功')
+                    conn = sqlite3.connect('faka.sqlite3')
+                    cursor = conn.cursor()
+                    if 'out_trade_no' in return_data:
+                        cursor.execute(
+                            "update trade set trade_id=?, payment_method=?, out_trade_no=?, creat_time=? where trade_id=?",
+                            (new_trade_id, user_choose, str(return_data['out_trade_no']), now_time, trade_id))
+                    else:
+                        cursor.execute(
+                            "update trade set trade_id=?,payment_method=?,creat_time=?,out_trade_no=NULL where trade_id=?",
+                            (new_trade_id, user_choose, now_time, trade_id))
+                    conn.commit()
+                    conn.close()
+                    if return_data['type'] == 'url':
+                        pay_url = return_data['data']
+                        keyboard = [[InlineKeyboardButton("点击跳转支付", url=pay_url)]]
+                        reply_markup = InlineKeyboardMarkup(keyboard)
+                        query.edit_message_text(
+                            '{}请在{}s内支付完成，超时支付会导致发货失败！\n'
+                            '[点击这里]({})跳转支付，或者点击下方跳转按钮'.format(msg, PAY_TIMEOUT, pay_url),
+                            parse_mode='Markdown',
+                            reply_markup=reply_markup
+                        )
+                        return ConversationHandler.END
+                    elif return_data['type'] == 'qr_code':
+                        qr_code = return_data['data']
+                        query.edit_message_text(
+                            '{}请在{}s内支付完成，超时支付会导致发货失败！\n'.format(msg, PAY_TIMEOUT),
+                            parse_mode='Markdown',
+                        )
+                        bot.send_photo(
+                            chat_id=user_id,
+                            photo='{}'.format(qr_code)
+                        )
+                        return ConversationHandler.END
+                elif return_data['status'] == 'Failed':
+                    print(user_choose + " 支付接口故障，请前往命令行查看错误信息")
                     query.edit_message_text(
-                        '请在{}s内支付完成，超时支付会导致发货失败！\n'
-                        '[点击这里]({})跳转支付，或者点击下方跳转按钮'.format(PAY_TIMEOUT, pay_url),
-                        parse_mode='Markdown',
-                        reply_markup=reply_markup
+                        '订单创建失败：支付接口故障，请联系管理员处理！\n',
                     )
                     return ConversationHandler.END
-                elif return_data['type'] == 'qr_code':
-                    qr_code = return_data['data']
-                    query.edit_message_text(
-                        '请在{}s内支付完成，超时支付会导致发货失败！\n'.format(PAY_TIMEOUT),
-                        parse_mode='Markdown',
-                    )
-                    bot.send_photo(
-                        chat_id=user_id,
-                        photo='http://api.qrserver.com/v1/create-qr-code/?data={}&bgcolor=FFFFCB'.format(qr_code)
-                    )
-                    return ConversationHandler.END
-            elif return_data['status'] == 'Failed':
-                print(user_choose + " 支付接口故障，请前往命令行查看错误信息")
-                query.edit_message_text(
-                    '订单创建失败：支付接口故障，请联系管理员处理！\n',
-                )
-                return ConversationHandler.END
+            except Exception as e:
+                print(e)
         elif func == '取消订单':
             trade_id = int(context.user_data['trade_id'])
             card_id = int(context.user_data['card_id'])
