@@ -1,5 +1,5 @@
 ## 介绍
-原作者已经删库，这是由本人维护的分支。
+这是由本人维护的分支。
 
 这是一个Telegram 发卡机器人，此机器人基于Python开发，在Python 3.7运行环境测试通过。
 Telegram 交流反馈群组：@devourbots  [点击加入](https://t.me/devourbots)
