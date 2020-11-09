@@ -224,20 +224,28 @@ def submit_trade(update, context):
                 conn.commit()
                 conn.close()
                 if return_data['type'] == 'url':
+                    if 'msg' in return_data:
+                        msg = return_data['msg']
+                    else:
+                        msg = ''
                     pay_url = return_data['data']
                     keyboard = [[InlineKeyboardButton("点击跳转支付", url=pay_url)]]
                     reply_markup = InlineKeyboardMarkup(keyboard)
                     query.edit_message_text(
-                        '请在{}s内支付完成，超时支付会导致发货失败！\n'
-                        '[点击这里]({})跳转支付，或者点击下方跳转按钮'.format(PAY_TIMEOUT, pay_url),
+                        '{}请在{}s内支付完成，超时支付会导致发货失败！\n'
+                        '[点击这里]({})跳转支付，或者点击下方跳转按钮'.format(msg, PAY_TIMEOUT, pay_url),
                         parse_mode='Markdown',
                         reply_markup=reply_markup
                     )
                     return ConversationHandler.END
                 elif return_data['type'] == 'qr_code':
+                    if 'msg' in return_data:
+                        msg = return_data['msg']
+                    else:
+                        msg = ''
                     qr_code = return_data['data']
                     query.edit_message_text(
-                        '请在{}s内支付完成，超时支付会导致发货失败！\n'.format(PAY_TIMEOUT),
+                        '{}请在{}s内支付完成，超时支付会导致发货失败！\n'.format(msg, PAY_TIMEOUT),
                         parse_mode='Markdown',
                     )
                     bot.send_photo(
