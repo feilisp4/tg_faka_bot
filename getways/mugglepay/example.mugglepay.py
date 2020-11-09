@@ -72,7 +72,7 @@ def query(trade_id):
             return '查询失败，订单号不存在'
     except Exception as e:
         print(e)
-        print('epay | 查询请求失败')
+        print('mugglepay | 查询请求失败')
         return 'API请求失败'
 
 
