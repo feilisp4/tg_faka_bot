@@ -17,4 +17,4 @@ PAYMENT_METHOD = {
 }
 
 # 当前版本
-VERSION = '1.3.2'
+VERSION = '1.3.3'

@@ -49,12 +49,12 @@ def submit(price, subject, trade_id):
         )
         print(order_string)
         if order_string['msg'] == 'Success':
-            pr_code = order_string['qr_code']
-            print(pr_code)
+            qr_code = order_string['qr_code']
+            print(qr_code)
             return_data = {
                 'status': 'Success',
                 'type': 'qr_code',  # url / qr_code
-                'data': pr_code
+                'data': 'http://api.qrserver.com/v1/create-qr-code/?data={}&bgcolor=FFFFCB'.format(qr_code)     # 自行对接二维码API
             }
             return return_data
         else:
